@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Player Registration</title>
+  </head>
+  <script>
+    function validateAge() {
+      var dob = document.getElementById("dob").value;
+      var today = new Date();
+      var birthDate = new Date(dob);
+      var age = today.getFullYear() - birthDate.getFullYear();
+      var monthDiff = today.getMonth() - birthDate.getMonth();
+
+      // Adjust age if necessary
+      if (
+        monthDiff < 0 ||
+        (monthDiff === 0 && today.getDate() < birthDate.getDate())
+      ) {
+        age--;
+      }
+
+      if (age < 13) {
+        alert("Sorry, you must be at least 13 years old.");
+        return false;
+      }
+      return true;
+    }
+    function validateFirstName(firstName) {
+      if (firstName.length > 3) {
+        return true;
+      } else {
+        return false;
+      }
+    }
+
+    let firstName = "John";
+
+    if (validateFirstName(firstName)) {
+      console.log("The first name is valid.");
+    } else {
+      console.log(
+        "The first name is not valid. It must be more than three (3) characters in length."
+      );
+    }
+    function validateEmail(email) {
+      let re = /^[\w-]+(\.[\w-]+)*@SomeEmail\.com$/;
+      return re.test(email);
+    }
+
+    let email = "john.doe@SomeEmail.com";
+
+    if (validateEmail(email)) {
+      console.log("The email address is valid.");
+    } else {
+      console.log(
+        "The email address is not valid. It must end with '@SomeEmail.com'."
+      );
+    }
+    function Register() {
+      let firstName = document.getElementById("firstName").value;
+      let lastName = document.getElementById("lastName").value;
+      let email = document.getElementById("email").value;
+      let age = document.getElementById("age").value;
+
+      if (!validateName(firstName) || !validateName(lastName)) {
+        alert(
+          "First name and last name must contain only letters and should not be empty."
+        );
+        return;
+      }
+
+      if (!validateEmail(email)) {
+        alert("Email must be in the correct format and should not be empty.");
+        return;
+      }
+
+      if (!validateAge(age)) {
+        alert("Age must be a positive integer and should not be empty.");
+        return;
+      }
+
+      let player = {
+        firstName: firstName,
+        lastName: lastName,
+        email: email,
+        age: age,
+      };
+
+      PlayersData.push(player);
+
+      console.log(PlayersData);
+    }
+
+    function validateName(name) {
+      let re = /^[A-Za-z]+$/;
+      return re.test(name);
+    }
+
+    function validateEmail(email) {
+      let re = /^[\w-]+(\.[\w-]+)*@[\w-]+(\.[\w-]+)*$/;
+      return re.test(email);
+    }
+
+    function validateAge(age) {
+      let re = /^[1-9][0-9]*$/;
+      return re.test(age);
+    }
+    function PlayGame() {
+      // Generate random numbers for the question
+      const num1 = Math.floor(Math.random() * 9) + 1;
+      const num2 = Math.floor(Math.random() * 5) + 1;
+
+      // Display the equation to the player
+      document.getElementById(
+        "playAreaNumbers"
+      ).innerText = `${num1} x ${num2}`;
+
+      // You can add more logic here if needed
+    }
+
+    // Call PlayGame() to start the game
+    PlayGame();
+
+    function startGame() {
+      // Enable Play area, answer input, Accept button, and Next button
+
+      document.getElementById("age").disabled = false; // Enable age input
+      document.getElementById("dob").disabled = false; // Enable date of birth input
+      document.getElementById("gender").disabled = false; // Enable gender select
+      document.getElementById("email").disabled = false; // Enable email input
+
+      // Call PlayGame() from Task 4
+      PlayGame();
+    }
+    function CheckAnswer() {
+      // Get the player's answer
+      const userAnswer = document.getElementById("answer").value;
+
+      // Get the mathematical equation
+      const equation = document.getElementById("playAreaNumbers").innerText;
+
+      // Evaluate the correct answer based on the mathematical equation
+      const correctAnswer = eval(equation);
+
+      // Check if the answer is correct
+      const isCorrect = parseInt(userAnswer) === correctAnswer;
+
+      // Create an entry for PlayerRegistrationData
+      const entry = {
+        equation: equation,
+        userAnswer: userAnswer,
+        isCorrect: isCorrect,
+      };
+
+      // Append the entry to PlayerRegistrationData
+      PlayerRegistrationData.push(entry);
+
+      // Display a message based on the correctness of the answer
+      if (isCorrect) {
+        alert("Correct! Well done.");
+      } else {
+        alert(`Incorrect. The correct answer is ${correctAnswer}.`);
+      }
+    }
+    // Player data
+    var playerName = "John Doe";
+    var playerTown = "Springfield";
+    var currentDate = new Date().toLocaleDateString();
+
+    // Questions and answers
+    var questions = [
+      { question: "What is 2+2?", answer: 4, userAnswer: null },
+      { question: "What is 5*5?", answer: 25, userAnswer: null },
+      // ...
+    ];
+
+    // Calculate score
+    function calculateScore() {
+      var correctAnswers = 0;
+      var incorrectAnswers = 0;
+
+      for (var i = 0; i < questions.length; i++) {
+        if (questions[i].userAnswer === questions[i].answer) {
+          correctAnswers++;
+        } else if (questions[i].userAnswer !== null) {
+          incorrectAnswers++;
+        }
+      }
+
+      return {
+        correctAnswers: correctAnswers,
+        incorrectAnswers: incorrectAnswers,
+        totalQuestions: questions.length,
+      };
+    }
+
+    // Find percentage score and display data
+    function findPercentageScore() {
+      var score = calculateScore();
+      var percentageScore = (score.correctAnswers / score.totalQuestions) * 100;
+
+      // Clear the 'showpercentage' textarea before displaying all data in it.
+      document.getElementById("showpercentage").value = "";
+
+      // Append all the required data to the 'showpercentage' textarea.
+      document.getElementById("showpercentage").value +=
+        "Player Name: " + playerName + "\n";
+      document.getElementById("showpercentage").value +=
+        "Player Town: " + playerTown + "\n";
+      document.getElementById("showpercentage").value +=
+        "Current Date: " + currentDate + "\n";
+      document.getElementById("showpercentage").value +=
+        "Total Number of Questions: " + score.totalQuestions + "\n";
+      document.getElementById("showpercentage").value +=
+        "Number of Correct Answers: " + score.correctAnswers + "\n";
+      document.getElementById("showpercentage").value +=
+        "Number of Incorrect Answers: " + score.incorrectAnswers + "\n";
+      document.getElementById("showpercentage").value +=
+        "Percentage Score: " + percentageScore.toFixed(2) + "%\n";
+    }
+  </script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+    }
+
+    form {
+      width: 300px;
+      margin: 0 auto;
+    }
+
+    label {
+      font-weight: bold;
+      margin-top: 10px;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="number"],
+    input[type="date"],
+    select {
+      width: 100%;
+      padding: 12px 20px;
+      margin: 8px 0;
+      box-sizing: border-box;
+    }
+
+    input[type="submit"] {
+      background-color: #4caf50;
+      color: white;
+      padding: 14px 20px;
+      margin: 8px 0;
+      border: none;
+      cursor: pointer;
+      width: 100%;
+    }
+
+    input[type="submit"]:hover {
+      background-color: #45a049;
+    }
+  </style>
+  <body>
+    <center><h2>Player Registration</h2></center>
+    <form
+      action="/submit_player_registration"
+      method="post"
+      enctype="multipart/form-data"
+    >
+      <fieldset>
+        <label for="firstname">Player's First Name:</label><br />
+        <input type="text" id="firstname" name="firstname" required /><br />
+        <label for="lastname">Player's Last Name:</label><br />
+        <input type="text" id="lastname" name="lastname" /><br />
+
+        <label for="dob">DOB:</label><br />
+        <input type="date" id="dob" name="dob" required /><br />
+
+        <label for="email">Email:</label><br />
+        <input type="email" id="email" name="email" /><br />
+
+        <label for="age">Age:</label><br />
+        <input type="number" id="age" name="age" /><br />
+
+        <label for="gender">Gender:</label><br />
+        <select id="gender" name="gender" required>
+          <option value="male">Male</option>
+          <option value="female">Female</option>
+          <option value="other">Other</option></select
+        ><br />
+
+        <label for="address">Address:</label><br />
+        <input
+          type="text"
+          id="street"
+          name="street"
+          placeholder="Street"
+        /><br />
+        <input type="text" id="city" name="city" placeholder="City" /><br />
+        <input
+          type="text"
+          id="town"
+          name="town"
+          placeholder="Town"
+          required
+        /><br />
+        <input
+          type="text"
+          id="country"
+          name="country"
+          placeholder="Country"
+        /><br />
+
+        <label for="education">Educational Level:</label><br />
+        <select id="education" name="education" required>
+          <option value="primary">Primary</option>
+          <option value="secondary">Secondary</option>
+          <option value="tertiary">Tertiary</option></select
+        ><br />
+
+        <label for="image">Image of Self:</label><br />
+        <input type="file" id="image" name="image" /><br />
+
+        <input type="submit" value="Submit" />
+      </fieldset>
+      <!-- Start button to trigger PlayGame() -->
+      <input type="button" value="Start" onclick="startGame()" />
+
+      <!-- Play area, answer input, Accept button, and Next button here -->
+
+      <div id="playArea">
+        <label for="playAreaNumbers">Play Area:</label>
+        <p id="playAreaNumbers"></p>
+
+        <label for="answer">Your Answer:</label>
+        <input type="text" id="answer" name="answer" />
+
+        <!-- CheckAnswer button -->
+        <input type="button" value="Check Answer" onclick="CheckAnswer()" />
+
+        <button type="button" onclick="nextQuestion()">Next</button>
+      </div>
+      <fieldset>
+        <label for="showpercentage">Percentage Scores:</label><br />
+        <textarea id="showpercentage" name="showpercentage" readonly></textarea
+        ><br />
+
+        <input type="submit" value="Submit" />
+      </fieldset>
+    </form>
+  </body>
+</html>
